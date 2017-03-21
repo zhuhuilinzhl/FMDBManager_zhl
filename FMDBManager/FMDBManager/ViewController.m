@@ -30,10 +30,10 @@
      2、  加了“1=1”的过滤条件以后数据库系统就无法使用索引等查询优化策略，数据库系统将会被迫对每行数据进行扫描（也就是全表扫描）以比较此行是否满足过滤条件，因此如果数据检索对性能有比较高的要求就不要使用这种“where 1=1”的方式来偷懒。
      */
     
-    
     NSMutableArray *dataArr = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray *dataArr2 = [NSMutableArray arrayWithCapacity:0];
     
+    //创造数据，模拟网络请求得到的json数据
     for (int i = 0; i < 5; i++) {
         Person *person = [[Person alloc]init];
         person.name = [NSString stringWithFormat:@"name%d", i+1];
@@ -53,22 +53,24 @@
      第一种：简单类型的model  
            直接把一种类型的model添加到存储到这种类型的表中，不对存储的model做任何改变。
      */
-        //删 旧数据
-        [FMDBManage deleteFromTable:[Person class] WithString:[NSString stringWithFormat:@"1=1"]];
+    
     /*
      对于“where 1=1”，见最上面的解释，简单来说就是选择全部的意思，加上与不加上1=1，表示的意思相同。
      */
-        for (Person *tmpObj in dataArr) {
-            //增  如果全表只有一种类型的model，可以这么写
-            [FMDBManage insertProgramWithObject:tmpObj];
+    //删 旧数据
+    [FMDBManage deleteFromTable:[Person class] WithString:[NSString stringWithFormat:@"1=1"]];
     
-        }
+    for (Person *tmpObj in dataArr) {
+        //增  如果全表只有一种类型的model，可以这么写
+        [FMDBManage insertProgramWithObject:tmpObj];
+        
+    }
     
-        //查找 数据
-        NSArray *tmpArr = [FMDBManage getDataFromTable:[Person class] WithString:@"1=1"];
-        for (Person *tmpObj in tmpArr) {
-            NSLog(@"tmpObj:%@", tmpObj);
-        }
+    //查找 数据
+    NSArray *tmpArr = [FMDBManage getDataFromTable:[Person class] WithString:@"1=1"];
+    for (Person *tmpObj in tmpArr) {
+        NSLog(@"tmpObj:%@", tmpObj);
+    }
 
     
     
