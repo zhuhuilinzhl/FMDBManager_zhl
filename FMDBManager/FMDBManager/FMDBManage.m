@@ -10,7 +10,6 @@
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
 #import <objc/runtime.h>
-//#import "MetaData.h"
 
 static FMDatabase *db = nil;
 
@@ -39,6 +38,7 @@ static FMDatabase *db = nil;
     NSArray *filePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = [filePath objectAtIndex:0];
     NSString *dbFilePath = [documentPath stringByAppendingPathComponent:@"db.sqlite"];
+    //在Documents下创建一个数据库
     NSLog(@"dbFilePath:%@", dbFilePath);
     return dbFilePath;
 }
@@ -65,8 +65,10 @@ static FMDatabase *db = nil;
     //为数据库设置缓存，提高查询效率
     [db setShouldCacheStatements:YES];
     
+    NSString *tableName = [NSString stringWithFormat:@"%@",[object class]];
+    
     //判断数据库中是否已经存在这个表，如果不存在则创建该表
-    if([db tableExists:@"downloadTable"] == NO)
+    if([db tableExists:tableName] == NO)
     {
         //获取对象所有key
         NSArray *keys = [self propertyKeys:object];
@@ -102,17 +104,17 @@ static FMDatabase *db = nil;
 + (void) insertProgramWithObject:(id) object
 {
     NSString *tableName = [NSString stringWithFormat:@"%@",[object class]];
-    if (!db)
-    {
-        [self creatTableWithObject:object];
-    }
+//    if (!db)
+//    {
+//        [self creatTableWithObject:object];
+//    }
     
-    if (![db open]) {
-        NSLog(@"数据库打开失败");
-        return;
-    }
+//    if (![db open]) {
+//        NSLog(@"数据库打开失败");
+//        return;
+//    }
     
-    [db setShouldCacheStatements:YES];
+    //[db setShouldCacheStatements:YES];
     
     if(![db tableExists:tableName])
     {
@@ -209,6 +211,7 @@ static FMDatabase *db = nil;
 {
     if ([string isEqualToString:@""] || string == nil || [string isEqualToString:@"(null)"] || !(string.length > 0))
     {
+        //表示没有特殊要求，对全表进行扫描
         string = @"1=1";
     }
     
@@ -232,7 +235,7 @@ static FMDatabase *db = nil;
     }
     
     NSString *sqlString = [NSString stringWithFormat:@"delete from %@ where %@",tableName,string];
-    NSLog(@"delete from  where ");
+    NSLog(@"delete:%@", sqlString);
     [db executeUpdate:sqlString];
     
 }
@@ -246,6 +249,7 @@ static FMDatabase *db = nil;
     
     if ([setString isEqualToString:@""] || setString == nil || [setString isEqualToString:@"(null)"])
     {
+        //setString为空，就返回
         return;
     }
     
@@ -327,13 +331,13 @@ static FMDatabase *db = nil;
 //}
 
 /**
- *  清楚db文件
+ *  清除db文件
  */
-+ (void)clearDBFile
-{
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[FMDBManage databaseFilePath]]) {
-        [[NSFileManager defaultManager] removeItemAtPath:[FMDBManage databaseFilePath] error:nil];
-    }
-}
+//+ (void)clearDBFile
+//{
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:[FMDBManage databaseFilePath]]) {
+//        [[NSFileManager defaultManager] removeItemAtPath:[FMDBManage databaseFilePath] error:nil];
+//    }
+//}
 
 @end

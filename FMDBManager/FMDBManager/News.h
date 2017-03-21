@@ -13,5 +13,5 @@
 
 @property (nonatomic, copy)NSString *title;
 @property (nonatomic, copy)NSString *content;
-@property (nonatomic, strong)NSArray *imgsUrlArr;
+@property (nonatomic, strong)NSArray *imgsUrlArr;//数组存储的时候可以转换为string类型
 @end
