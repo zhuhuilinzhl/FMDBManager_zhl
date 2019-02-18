@@ -21,6 +21,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    
+    
+    
+    
     /*
      1、  SQL中使用了where 1=1 ，很优美的解决了参数中ageValue为空时SQL语法错误的情况。但是当表中的数据量比较大的时候查询速度会非常慢，很可能会造成非常大的性能损失。
      
